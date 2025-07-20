@@ -1,0 +1,199 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #c4e9e5;
+}
+
+body, html {
+  height: 100%;
+  font-family: monospace;
+  background-color:#031816;
+}
+
+.container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 10px;
+  padding: 10px;
+  grid-template-areas: 
+    "head head head head head head head head head"
+    "plot plot plot plot plot plot or or or "
+    "plot plot plot plot plot plot or or or "
+    "plot plot plot plot plot plot or or or "
+    "plot plot plot plot plot plot or or or "
+    "rpm rpm rpm cs cs cs numerical numerical numerical"
+    "rpm rpm rpm cs cs cs numerical numerical numerical"
+    "rpm rpm rpm cs cs cs numerical numerical numerical";
+}
+
+.Head {
+  grid-area: head;
+  border: 3px solid #38b1a5;
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
+  color: #c4e9e5;
+  padding: 10px 10px;
+
+}
+
+.plotContainer {
+  grid-area: plot;
+  border: 3px solid #38b1a5;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.Plotter{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.statusBar{
+  display: flex;
+  position: absolute;
+  top:0px;
+  column-gap: 5px;
+}
+
+.stats{
+  padding: 7px;
+  background-color: #01211e;
+  color: #dbd3d3;
+  border: none;
+  border-radius: 10px;
+  display: flex;            /* Make button a flex container */
+  align-items: center;      /* Center vertically */
+  justify-content: center;  /* Center horizontally */
+  gap: 8px;   
+  padding-inline: 15px;
+}
+
+
+.statusdiv{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #39ff64;
+}
+
+
+.box {
+  flex: 1;                /* Equal distribution of space */
+  min-height: 0;          /* Prevents content overflow issues */
+  border-bottom: 2px solid #38b1a5; /* Visual separator (optional) */
+}
+.voltage{
+  border-right: 2px solid #38b1a5; 
+
+}
+
+.rpmData {
+  grid-area: rpm;
+  border: 3px solid #38b1a5;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
+
+.rpm{
+  border: 1px #38b1a5 solid;
+}
+
+.controlSurfaces {
+  grid-area: cs;
+  border: 3px solid #38b1a5;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.controlSurfacescanvas{
+  width: 100%;
+  height: 100%;
+}
+
+.top, .left, .right {
+  position: absolute;
+  z-index: 1000;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(20, 20, 30, 0.85);
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.top {
+  top: 5%;
+  left: 20%;
+  width: 15%;
+  font-size: 1.1rem;
+}
+
+.left {
+  bottom: 5%;
+  left: 22%;
+  width: 15%;
+  font-size: 1.1rem;
+}
+
+.right {
+  bottom: 5%;
+  right: 22%;
+  width: 15%;
+  font-size: 1.1rem;
+}
+
+
+.orientation {
+  grid-area: or;
+  border: 3px solid #38b1a5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.threejsCanvas{
+  width: 100%;
+  height: 100%;
+}
+
+.numericalData{
+  grid-area:numerical;
+  border: 5px #38b1a5 solid;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;   
+
+}
+
+
+.battery{
+  display: flex;
+  flex-direction: row;  /* volts and amps */
+}
+
+.battery div{
+  font-size: 2rem;
+  display: flex;
+  align-items: center;     /* Vertical */
+  justify-content: center; /* Horizontal */
+}
+
+
+
+p.developer{
+  font-size: 200%;
+  font-weight: 900;
+  padding: 10px 20px;
+
+}
