@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocopter Telemetry UI</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div class="grid">
+
+    <!-- Top Left -->
+    <div class="panel orientation">
+      <pre id="orientation"></pre>
+    </div>
+
+    <!-- Top Right (Sensors + Motors side by side) -->
+    <div class="panel top-right">
+      <div class="split">
+        <pre id="sensors"></pre>
+        <pre id="motors"></pre>
+      </div>
+    </div>
+
+    <!-- Bottom Left -->
+    <div class="panel control">
+      <pre id="servos"></pre>
+    </div>
+
+    <!-- Bottom Right (Message Box) -->
+    <div class="panel messages">
+      <pre id="log"></pre>
+    </div>
+
+  </div>
+  <script src="./src/main.js"></script>
+</body>
+</html>

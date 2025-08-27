@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background: #111;
+  font-family: "Courier New", monospace;
+  color: #eee;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;  /* right column bigger */
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.panel {
+  border: 1px dashed #888;
+  padding: 5px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: 0.9rem;
+  overflow: auto;
+  white-space: pre;
+}
+
+pre {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+}
+
+.top-right .split {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;   /* no huge gap */
+  align-items: flex-start;
+  gap: 100px;   /* adjust spacing between sensors + motors */
+}
+
+#sensors {
+  flex: none;   /* don’t stretch */
+  color: #7dd3fc;
+}
+
+
+#motors {
+  flex: none;
+  color: #fca5a5;
+}
+.control { color: #fcd34d; }
+.messages{ color: #a7f3d0; }
