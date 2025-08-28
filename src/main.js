@@ -41,54 +41,107 @@
       }
 
       // Ensure #cubeContainer exists (do not remove existing layout if present)
-      let cubeContainer = document.getElementById('cubeContainer');
-      if (!cubeContainer) {
-        cubeContainer = document.createElement('div');
-        cubeContainer.id = 'cubeContainer';
-        
-        // CRITICAL: Remove all fixed sizing and use flex to fill parent
-        cubeContainer.style.width = '100%';
-        cubeContainer.style.height = '100%';
-        cubeContainer.style.display = 'flex';
-        cubeContainer.style.justifyContent = 'center';
-        cubeContainer.style.alignItems = 'center';
-        cubeContainer.style.overflow = 'hidden'; // Prevent scrolling
-        
-        panel.appendChild(cubeContainer);
-      } else {
-        // If container already exists, ensure it has the correct styles
-        cubeContainer.style.width = '100%';
-        cubeContainer.style.height = '100%';
-        cubeContainer.style.display = 'flex';
-        cubeContainer.style.justifyContent = 'center';
-        cubeContainer.style.alignItems = 'center';
-        cubeContainer.style.overflow = 'hidden';
-      }
+let cubeContainer = document.getElementById('cubeContainer');
+if (!cubeContainer) {
+  cubeContainer = document.createElement('div');
+  cubeContainer.id = 'cubeContainer';
+  
+  // CRITICAL: Remove all fixed sizing and use flex to fill parent
+  cubeContainer.style.width = '100%';
+  cubeContainer.style.height = '100%';
+  cubeContainer.style.display = 'flex';
+  cubeContainer.style.justifyContent = 'center';
+  cubeContainer.style.alignItems = 'center';
+  cubeContainer.style.overflow = 'hidden'; // Prevent scrolling
+  
+  // Add heading for orientation cube
+  const orientationHeading = document.createElement('h3');
+  orientationHeading.textContent = 'ORIENTATION';
+  orientationHeading.style.margin = '6px';
+  orientationHeading.style.fontFamily = 'Courier New, monospace';
+  orientationHeading.style.color = '#eee';
+  orientationHeading.style.fontSize = '0.9rem';
+  orientationHeading.style.fontWeight = 'bold';
+  orientationHeading.style.textAlign = 'center'; // Center the text
+  orientationHeading.style.width = '100%'; // Make it full width
+  
+  // Create a container div for proper layout
+  const orientationContainer = document.createElement('div');
+  orientationContainer.style.display = 'flex';
+  orientationContainer.style.flexDirection = 'column';
+  orientationContainer.style.width = '100%';
+  orientationContainer.style.height = '100%';
+  
+  // Add heading first, then the cube container
+  orientationContainer.appendChild(orientationHeading);
+  orientationContainer.appendChild(cubeContainer);
+  
+  // Replace the cubeContainer in panel with the new container
+  panel.appendChild(orientationContainer);
+} else {
+  // If container already exists, ensure it has the correct styles
+  cubeContainer.style.width = '100%';
+  cubeContainer.style.height = '100%';
+  cubeContainer.style.display = 'flex';
+  cubeContainer.style.justifyContent = 'center';
+  cubeContainer.style.alignItems = 'center';
+  cubeContainer.style.overflow = 'hidden';
+  
+  // Add heading if it doesn't exist
+  if (!document.getElementById('orientationHeading')) {
+    const orientationHeading = document.createElement('h3');
+    orientationHeading.id = 'orientationHeading';
+    orientationHeading.textContent = 'ORIENTATION';
+    orientationHeading.style.margin = '6px';
+    orientationHeading.style.fontFamily = 'Courier New, monospace';
+    orientationHeading.style.color = 'rgba(183, 232, 255, 1)';
+    orientationHeading.style.fontSize = '0.9rem';
+    orientationHeading.style.fontWeight = 'bold';
+    orientationHeading.style.textAlign = 'center'; // Center the text
+    orientationHeading.style.width = '100%'; // Make it full width
+    
+    // Create a container div for proper layout
+    const orientationContainer = document.createElement('div');
+    orientationContainer.style.display = 'flex';
+    orientationContainer.style.flexDirection = 'column';
+    orientationContainer.style.width = '100%';
+    orientationContainer.style.height = '100%';
+    
+    // Replace cubeContainer with new container structure
+    const parent = cubeContainer.parentNode;
+    parent.insertBefore(orientationHeading, cubeContainer);
+    
+    // Move cubeContainer into the new structure
+    orientationContainer.appendChild(orientationHeading);
+    orientationContainer.appendChild(cubeContainer);
+    parent.appendChild(orientationContainer);
+  }
+}
 
 
 // ----- CONTROL SURFICES SETUP -----
 // Ensure controlSurfaces container exists
-const controlSurfacesContainer = document.querySelector('.panel.control') || document.body;
+  const controlSurfacesContainer = document.querySelector('.panel.control') || document.body;
 
-// Create canvas for control surfaces
-const controlSurfacesCanvas = document.createElement('canvas');
-controlSurfacesCanvas.className = 'controlSurfacescanvas';
-controlSurfacesCanvas.style.width = '100%';
-controlSurfacesCanvas.style.height = '100%';
-controlSurfacesCanvas.style.display = 'block';
+  // Create canvas for control surfaces
+  const controlSurfacesCanvas = document.createElement('canvas');
+  controlSurfacesCanvas.className = 'controlSurfacescanvas';
+  controlSurfacesCanvas.style.width = '100%';
+  controlSurfacesCanvas.style.height = '100%';
+  controlSurfacesCanvas.style.display = 'block';
 
-// Create container div for control surfaces
-const containerControlSurface = document.createElement('div');
-containerControlSurface.className = 'controlSurfaces';
-containerControlSurface.style.width = '100%';
-containerControlSurface.style.height = '100%';
-containerControlSurface.style.display = 'flex';
-containerControlSurface.style.justifyContent = 'center';
-containerControlSurface.style.alignItems = 'center';
-containerControlSurface.style.overflow = 'hidden';
+  // Create container div for control surfaces
+  const containerControlSurface = document.createElement('div');
+  containerControlSurface.className = 'controlSurfaces';
+  containerControlSurface.style.width = '100%';
+  containerControlSurface.style.height = '100%';
+  containerControlSurface.style.display = 'flex';
+  containerControlSurface.style.justifyContent = 'center';
+  containerControlSurface.style.alignItems = 'center';
+  containerControlSurface.style.overflow = 'hidden';
 
-containerControlSurface.appendChild(controlSurfacesCanvas);
-controlSurfacesContainer.appendChild(containerControlSurface);
+  containerControlSurface.appendChild(controlSurfacesCanvas);
+  controlSurfacesContainer.appendChild(containerControlSurface);
 
 // Utility function for degrees to radians
 function degToRad(degrees) {
@@ -320,6 +373,12 @@ function updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle) {
   controlsurface3.rotation.y = servo3Rad;  // Bottom-right surface
 }
 
+// fucntion to control the rotation of the orientation cube
+function updateOrientationFromQuaternion(w, x, y, z) {
+  // Directly set the cube's orientation from quaternion values
+  // MPU6050 typically provides quaternion in w, x, y, z order
+  cube.quaternion.set(x, y, z, w);
+}
 
       // ----- Telemetry update (demo random data). Update this to use your socket values -----
       function updateTelemetry() {
@@ -350,6 +409,23 @@ function updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle) {
           const magZ = randFloat(-50, 50);
 
           const temp = randFloat(20, 30);
+
+
+
+          const quatW = randFloat(-1, 1, 3);
+    const quatX = randFloat(-1, 1, 3);
+    const quatY = randFloat(-1, 1, 3);
+    const quatZ = randFloat(-1, 1, 3);
+    
+    // Normalize the quaternion (important!)
+    const length = Math.sqrt(quatW*quatW + quatX*quatX + quatY*quatY + quatZ*quatZ);
+    const normalizedW = quatW / length;
+    const normalizedX = quatX / length;
+    const normalizedY = quatY / length;
+    const normalizedZ = quatZ / length;
+    
+    // UPDATE ORIENTATION WITH QUATERNION
+    updateOrientationFromQuaternion(normalizedW, normalizedX, normalizedY, normalizedZ);
 
           sensorsEl.textContent =
 `SENSORS
@@ -391,7 +467,7 @@ YAW   : ${makeBar(yaw, -1, 1)} ${fix(yaw,3)}
 THRUST: ${makeBar(thrust, 0, 1)} ${fix(thrust,3)}`; 
 
           // Update cube orientation from these normalised control values
-          updateCubeFromNormalisedRPY(roll, pitch, yaw);
+        
 
         } catch (err) {
           console.error('updateTelemetry error', err);
