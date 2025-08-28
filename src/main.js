@@ -376,7 +376,7 @@ window.addEventListener('resize', handleControlResize);
 
 
 
-// ----- THREE.JS SETUP: simple cube + axes -----
+// ----- THREE.JS SETUP: simple cube + axes ----------------------------------------------------------------------------------
 const scene = new THREE.Scene();
 
 // Camera - initialize with default aspect ratio, will be updated
@@ -417,7 +417,7 @@ function handleResize() {
   camera.aspect = containerWidth / containerHeight;
   camera.updateProjectionMatrix();
   
-  console.log('Canvas size:', containerWidth, 'x', containerHeight);
+
 }
 
 // Set initial size and add resize listener
@@ -441,8 +441,49 @@ cube.add(cubeEdges);
 // Axes helper
 const axesHelper = new THREE.AxesHelper(3);
 scene.add(axesHelper);
+// -------------------------------------Orientation ends here ----------------------------------------------------------
 
-// Animation loop
+
+// ---------------------------fucntion to setup websocket-----------------------------------------------------
+function setupWebSocket() {
+  const socket = new WebSocket('ws://127.0.0.1:8080'); // Your RPi Zero address
+  
+  socket.onopen = function() {
+    console.log('WebSocket connected to monocopter');
+  };
+  
+  socket.onmessage = function(event) {
+    try {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      updateTelemetry(data); // Pass real data instead of generating random
+    } catch (err) {
+      console.error('WebSocket data parse error', err);
+    }
+  };
+  
+  socket.onerror = function(error) {
+    console.error('WebSocket error', error);
+  };
+  
+  socket.onclose = function() {
+    console.log('WebSocket disconnected');
+  };
+  
+  return socket;
+}
+
+// Call this after your Three.js setup
+const monocopterSocket = setupWebSocket();
+
+
+
+
+
+
+
+
+// Animation loop for three js
 (function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
@@ -499,108 +540,103 @@ function updateOrientationFromQuaternion(w, x, y, z) {
 }
 
       // ----- Telemetry update (demo random data). Update this to use your socket values -----
-      function updateTelemetry() {
-        try {
-          // SENSORS
-           // Generate random servo angles FIRST
-    const servo1Angle = randFloat(0, 180);
-    const servo2Angle = randFloat(0, 180);
-    const servo3Angle = randFloat(0, 180);
+function updateTelemetry(data) {
+  try {
+    // --- CONTROL SURFACES (Servos) ---
+    // Update control surfaces with actual servo angles
+    updateControlSurfaces(data.servo1, data.servo2, data.servo3);
 
+    // --- ORIENTATION (Quaternion) ---
+    const length = Math.sqrt(
+      data.quatW * data.quatW +
+      data.quatX * data.quatX +
+      data.quatY * data.quatY +
+      data.quatZ * data.quatZ
+    );
 
+    // Normalize quaternion
+    const normalizedW = data.quatW / length;
+    const normalizedX = data.quatX / length;
+    const normalizedY = data.quatY / length;
+    const normalizedZ = data.quatZ / length;
 
-    
-    // THEN update control surfaces with the actual values
-    updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle);
-
-          const altitude = randFloat(100, 200);
-          const barometer = randFloat(990, 1030);
-          const ultrasonic = randFloat(0.5, 5.0);
-
-          const accelX = randFloat(-1, 1);
-          const accelY = randFloat(-1, 1);
-          const accelZ = randFloat(9, 10);
-
-          const gyroX = randFloat(-2, 2);
-          const gyroY = randFloat(-2, 2);
-          const gyroZ = randFloat(-2, 2);
-
-          const magX = randFloat(-50, 50);
-          const magY = randFloat(-50, 50);
-          const magZ = randFloat(-50, 50);
-
-          const temp = randFloat(20, 30);
-
-
-
-          const quatW = randFloat(-1, 1, 3);
-    const quatX = randFloat(-1, 1, 3);
-    const quatY = randFloat(-1, 1, 3);
-    const quatZ = randFloat(-1, 1, 3);
-    
-    // Normalize the quaternion (important!)
-    const length = Math.sqrt(quatW*quatW + quatX*quatX + quatY*quatY + quatZ*quatZ);
-    const normalizedW = quatW / length;
-    const normalizedX = quatX / length;
-    const normalizedY = quatY / length;
-    const normalizedZ = quatZ / length;
-    
-    // UPDATE ORIENTATION WITH QUATERNION
     updateOrientationFromQuaternion(normalizedW, normalizedX, normalizedY, normalizedZ);
 
-          sensorsEl.textContent =
+    // --- DISPLAY SENSOR VALUES ---
+   sensorsEl.textContent =
 `SENSORS
 ───────
-ALT:  ${makeBar(altitude, 100, 200)} ${fix(altitude,2)} m
-BARO: ${makeBar(barometer, 990, 1030)} ${fix(barometer,2)} hPa
-US:   ${makeBar(ultrasonic, 0, 5)} ${fix(ultrasonic,2)} m
+ALT:  ${makeBar(data.altitude, 100, 200)} ${data.altitude.toFixed(3)} m
+BARO: ${makeBar(data.barometer, 990, 1030)} ${data.barometer.toFixed(3)} hPa
+US:   ${makeBar(data.ultrasonic, 0, 5)} ${data.ultrasonic.toFixed(3)} m
 
-ACCEL: X:${fix(accelX,2)} Y:${fix(accelY,2)} Z:${fix(accelZ,2)}
-GYRO : X:${fix(gyroX,2)} Y:${fix(gyroY,2)} Z:${fix(gyroZ,2)}
-MAG  : X:${fix(magX,1)} Y:${fix(magY,1)} Z:${fix(magZ,1)}
 
-TEMP: ${fix(temp,1)} °C
+ACCEL: X:${data.accelX.toFixed(3)} Y:${data.accelY.toFixed(3)} Z:${data.accelZ.toFixed(3)}
+GYRO : X:${data.gyroX.toFixed(3)} Y:${data.gyroY.toFixed(3)} Z:${data.gyroZ.toFixed(3)}
+MAG  : X:${data.magX.toFixed(3)} Y:${data.magY.toFixed(3)} Z:${data.magZ.toFixed(3)}
+
+TEMP: ${data.temp.toFixed(3)} °C
+
+
+
+
 SOCKET: CONNECTED (192.168.1.100:8080)`;
 
-          // MOTORS & CONTROL
-          const bldc1Rpm = randInt(2000, 3000);
-          const bldc2Rpm = randInt(2000, 3000);
-          const bldc1Temp = randInt(35, 50);
-          const bldc2Temp = randInt(35, 50);
-
-          // Normalised control values in [-1,1] for demo — map to cube tilt
-          const pitch = randFloat(-1, 1, 3);
-          const roll = randFloat(-1, 1, 3);
-          const yaw = randFloat(-1, 1, 3);
-          const thrust = randFloat(0, 1, 3);
-
-          motorsEl.textContent =
+motorsEl.textContent =
 `MOTORS & CONTROL
 ────────────────
-[BLDC1]   RPM: ${bldc1Rpm}   TEMP: ${bldc1Temp}°C
-[BLDC2]   RPM: ${bldc2Rpm}   TEMP: ${bldc2Temp}°C
+[BLDC1]   RPM: ${data.bldc1Rpm}   TEMP: ?°C
+[BLDC2]   RPM: ${data.bldc2Rpm}   TEMP: ?°C
+
+
 
 JOYSTICK INPUT (norm)
 ──────────────
-PITCH : ${makeBar(pitch, -1, 1)} ${fix(pitch,3)}
-ROLL  : ${makeBar(roll, -1, 1)} ${fix(roll,3)}
-YAW   : ${makeBar(yaw, -1, 1)} ${fix(yaw,3)}
-THRUST: ${makeBar(thrust, 0, 1)} ${fix(thrust,3)}`; 
+PITCH : ${makeBar(data.pitch, -1, 1)} ${data.pitch.toFixed(3)}
+ROLL  : ${makeBar(data.roll, -1, 1)} ${data.roll.toFixed(3)}
+YAW   : ${makeBar(data.yaw, -1, 1)} ${data.yaw.toFixed(3)}
+THRUST: ${makeBar(data.thrust, 0, 1)} ${data.thrust.toFixed(3)}`;
 
-          // Update cube orientation from these normalised control values
-        
+  } catch (err) {
+    console.error('updateTelemetry error', err);
+  }
+}
 
-        } catch (err) {
-          console.error('updateTelemetry error', err);
-        }
-      }
 
-      // Start telemetry updates every 2 seconds (2000 ms)
-      const telemetryTimer = setInterval(updateTelemetry, 200);
-      window.__monocopterTimers.push(telemetryTimer);
+//------------------------------updateTelemetryFunction ends here-------------------------------------------------------
+
+
+const telemetryData = {
+  servo1: 0,
+  servo2: 0,
+  servo3: 0,
+  altitude: 0,
+  barometer: 0,
+  ultrasonic: 0,
+  accelX: 0,
+  accelY: 0,
+  accelZ: 0,
+  gyroX: 0,
+  gyroY: 0,
+  gyroZ: 0,
+  magX: 0,
+  magY: 0,
+  magZ: 0,
+  temp: 0,
+  quatW: 1,
+  quatX: 0,
+  quatY: 0,
+  quatZ: 0,
+  bldc1Rpm: 0,
+  bldc2Rpm: 0,
+  pitch: 0,
+  roll: 0,
+  yaw: 0,
+  thrust: 0
+};
 
       // initial call
-      updateTelemetry();
+      updateTelemetry(telemetryData);
 
     } catch (err) {
       console.error('monocopter-ui top-level error', err);
