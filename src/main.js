@@ -486,9 +486,9 @@ function updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle) {
 
 //update the texts in controlsurface div
 function updateAngleDisplay(angle1, angle2, angle3) {
-    topLabel.textContent = `top: ${angle1.toFixed(1)}°`;
-    leftLabel.textContent = `left: ${angle2.toFixed(1)}°`;
-    rightLabel.textContent = `right: ${angle3.toFixed(1)}°`;
+    topLabel.textContent = `TOP: ${angle1.toFixed(1)}°`;
+    leftLabel.textContent = `LEFT: ${angle2.toFixed(1)}°`;
+    rightLabel.textContent = `RIGHT: ${angle3.toFixed(1)}°`;
 }
 
 // fucntion to control the rotation of the orientation cube
