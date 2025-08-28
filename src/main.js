@@ -119,34 +119,119 @@ if (!cubeContainer) {
 }
 
 
+
+
+
+
+
 // ----- CONTROL SURFICES SETUP -----
 // Ensure controlSurfaces container exists
-  const controlSurfacesContainer = document.querySelector('.panel.control') || document.body;
+const controlSurfacesContainer = document.querySelector('.panel.control') || document.body;
 
-  // Create canvas for control surfaces
-  const controlSurfacesCanvas = document.createElement('canvas');
-  controlSurfacesCanvas.className = 'controlSurfacescanvas';
-  controlSurfacesCanvas.style.width = '100%';
-  controlSurfacesCanvas.style.height = '100%';
-  controlSurfacesCanvas.style.display = 'block';
+// Add heading for control surfaces
+const controlHeading = document.createElement('h3');
+controlHeading.textContent = 'CONTROL SURFACES';
+controlHeading.style.margin = '6px';
+controlHeading.style.fontFamily = 'Courier New, monospace';
+controlHeading.style.color = '#8bd1ffff';
+controlHeading.style.fontSize = '0.9rem';
+controlHeading.style.fontWeight = 'bold';
+controlHeading.style.textAlign = 'center';
+controlHeading.style.width = '100%';
 
-  // Create container div for control surfaces
-  const containerControlSurface = document.createElement('div');
-  containerControlSurface.className = 'controlSurfaces';
-  containerControlSurface.style.width = '100%';
-  containerControlSurface.style.height = '100%';
-  containerControlSurface.style.display = 'flex';
-  containerControlSurface.style.justifyContent = 'center';
-  containerControlSurface.style.alignItems = 'center';
-  containerControlSurface.style.overflow = 'hidden';
+// Create a container div for proper layout
+const controlContainer = document.createElement('div');
+controlContainer.style.display = 'flex';
+controlContainer.style.flexDirection = 'column';
+controlContainer.style.width = '100%';
+controlContainer.style.height = '100%';
 
-  containerControlSurface.appendChild(controlSurfacesCanvas);
-  controlSurfacesContainer.appendChild(containerControlSurface);
+// Create canvas for control surfaces
+const controlSurfacesCanvas = document.createElement('canvas');
+controlSurfacesCanvas.className = 'controlSurfacescanvas';
+controlSurfacesCanvas.style.width = '100%';
+controlSurfacesCanvas.style.height = '100%';
+controlSurfacesCanvas.style.display = 'block';
+
+// Create container div for control surfaces
+const containerControlSurface = document.createElement('div');
+containerControlSurface.className = 'controlSurfaces';
+containerControlSurface.style.width = '100%';
+containerControlSurface.style.height = '100%';
+containerControlSurface.style.display = 'flex';
+containerControlSurface.style.justifyContent = 'center';
+containerControlSurface.style.alignItems = 'center';
+containerControlSurface.style.overflow = 'hidden';
+
+containerControlSurface.appendChild(controlSurfacesCanvas);
+
+// Add heading first, then the control surface container
+controlContainer.appendChild(controlHeading);
+
+
+//new
+// Create label container for values
+// --- Labels --- //
+
+// Top label row (centered)
+const topRow = document.createElement('div');
+topRow.style.textAlign = 'center';
+topRow.style.width = '100%';
+topRow.style.marginBottom = '4px'; // space before canvas
+topRow.style.fontFamily = 'Courier New, monospace';
+topRow.style.fontSize = '0.85rem';
+topRow.style.color = '#eee';
+topRow.textContent = 'top: 10';    //  ----> should edit the text content or add a variable instead of 7
+
+
+// Bottom row with left + right
+const bottomRow = document.createElement('div');
+bottomRow.style.display = 'flex';
+bottomRow.style.justifyContent = 'space-between';
+bottomRow.style.width = '100%';
+bottomRow.style.marginBottom = '6px'; // extra spacing
+bottomRow.style.fontFamily = 'Courier New, monospace';
+bottomRow.style.fontSize = '0.85rem';
+bottomRow.style.color = '#eee';
+
+const leftLabel = document.createElement('div');
+leftLabel.textContent = 'left: 6';          //  ----> should edit the text content or add a variable instead of 7
+
+const rightLabel = document.createElement('div');
+rightLabel.textContent = 'right: 7';        //  ----> should edit the text content or add a variable instead of 7
+
+bottomRow.appendChild(leftLabel);
+bottomRow.appendChild(rightLabel);
+
+// Append both rows under heading
+controlContainer.appendChild(topRow);
+controlContainer.appendChild(bottomRow);
+
+
+
+
+//new
+
+
+
+controlContainer.appendChild(containerControlSurface);
+
+// Replace in controlSurfacesContainer
+controlSurfacesContainer.appendChild(controlContainer);
+
+
+
+
 
 // Utility function for degrees to radians
 function degToRad(degrees) {
   return degrees * (Math.PI / 180);
 }
+
+
+
+
+
 
 // Control surfaces scene
 const scene1 = new THREE.Scene();
@@ -266,6 +351,7 @@ window.addEventListener('resize', handleControlResize);
   renderer1.render(scene1, camera1);
 })();
 // -------------------------------END OF CONTROL SURFACES-------------------------------------------------------------------
+
 
 
 
