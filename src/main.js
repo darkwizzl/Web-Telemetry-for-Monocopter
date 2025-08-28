@@ -170,45 +170,66 @@ controlContainer.appendChild(controlHeading);
 
 
 //new
-// Create label container for values
+
+
+// Create label container for values with absolute positioning
 // --- Labels --- //
 
-// Top label row (centered)
-const topRow = document.createElement('div');
-topRow.style.textAlign = 'center';
-topRow.style.width = '100%';
-topRow.style.marginBottom = '4px'; // space before canvas
-topRow.style.fontFamily = 'Courier New, monospace';
-topRow.style.fontSize = '0.85rem';
-topRow.style.color = '#eee';
-topRow.textContent = 'top: 10';    //  ----> should edit the text content or add a variable instead of 7
+// Position variables (adjust these values as needed)
+const topLabelPosition = { top: '60px', left: '55%', translate: '-50% 0' };
+const leftLabelPosition = { bottom: '90px', left: '30px' };
+const rightLabelPosition = { bottom: '90px', left: '380px' };
+const labelZIndex = '10';    // Z-index to place labels above canvas
 
+// Container for all labels with absolute positioning
+const labelContainer = document.createElement('div');
+labelContainer.style.position = 'absolute';
+labelContainer.style.top = '0';
+labelContainer.style.left = '0';
+labelContainer.style.width = '100%';
+labelContainer.style.height = '100%';
+labelContainer.style.zIndex = labelZIndex;
+labelContainer.style.pointerEvents = 'none'; // Allow clicks to pass through to canvas
 
-// Bottom row with left + right
-const bottomRow = document.createElement('div');
-bottomRow.style.display = 'flex';
-bottomRow.style.justifyContent = 'space-between';
-bottomRow.style.width = '100%';
-bottomRow.style.marginBottom = '6px'; // extra spacing
-bottomRow.style.fontFamily = 'Courier New, monospace';
-bottomRow.style.fontSize = '0.85rem';
-bottomRow.style.color = '#eee';
+// Top label (centered)
+const topLabel = document.createElement('div');
+topLabel.style.position = 'absolute';
+topLabel.style.top = topLabelPosition.top;
+topLabel.style.left = topLabelPosition.left;
+topLabel.style.transform = topLabelPosition.translate;
+topLabel.style.fontFamily = 'Courier New, monospace';
+topLabel.style.fontSize = '0.85rem';
+topLabel.style.color = '#eee';
+topLabel.textContent = 'top: 10';
 
+// Left label
 const leftLabel = document.createElement('div');
-leftLabel.textContent = 'left: 6';          //  ----> should edit the text content or add a variable instead of 7
+leftLabel.style.position = 'absolute';
+leftLabel.style.bottom = leftLabelPosition.bottom;
+leftLabel.style.left = leftLabelPosition.left;
+leftLabel.style.fontFamily = 'Courier New, monospace';
+leftLabel.style.fontSize = '0.85rem';
+leftLabel.style.color = '#eee';
+leftLabel.textContent = 'left: 6';
 
+// Right label
 const rightLabel = document.createElement('div');
-rightLabel.textContent = 'right: 7';        //  ----> should edit the text content or add a variable instead of 7
+rightLabel.style.position = 'absolute';
+rightLabel.style.bottom = rightLabelPosition.bottom;
+rightLabel.style.left = rightLabelPosition.left;
+rightLabel.style.fontFamily = 'Courier New, monospace';
+rightLabel.style.fontSize = '0.85rem';
+rightLabel.style.color = '#eee';
+rightLabel.textContent = 'right: 7';
 
-bottomRow.appendChild(leftLabel);
-bottomRow.appendChild(rightLabel);
+// Add labels to container
+labelContainer.appendChild(topLabel);
+labelContainer.appendChild(leftLabel);
+labelContainer.appendChild(rightLabel);
 
-// Append both rows under heading
-controlContainer.appendChild(topRow);
-controlContainer.appendChild(bottomRow);
-
-
-
+// Append container to controlContainer
+controlContainer.style.position = 'relative'; // Ensure positioning context
+controlContainer.appendChild(labelContainer);
 
 //new
 
@@ -448,6 +469,7 @@ function updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle) {
   // 90° servo angle = 0° rotation (neutral)
   // 0° servo angle = -90° rotation (full negative)
   // 180° servo angle = +90° rotation (full positive)
+  updateAngleDisplay(servo1Angle,servo2Angle,servo3Angle);
   
   const servo1Rad = (servo1Angle - 90) * (Math.PI / 180);
   const servo2Rad = (servo2Angle - 90) * (Math.PI / 180);
@@ -457,6 +479,16 @@ function updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle) {
   controlsurface1.rotation.y = servo1Rad;  // Top surface
   controlsurface2.rotation.y = servo2Rad;  // Bottom-left surface  
   controlsurface3.rotation.y = servo3Rad;  // Bottom-right surface
+}
+
+
+
+
+//update the texts in controlsurface div
+function updateAngleDisplay(angle1, angle2, angle3) {
+    topLabel.textContent = `top: ${angle1.toFixed(1)}°`;
+    leftLabel.textContent = `left: ${angle2.toFixed(1)}°`;
+    rightLabel.textContent = `right: ${angle3.toFixed(1)}°`;
 }
 
 // fucntion to control the rotation of the orientation cube
@@ -474,6 +506,9 @@ function updateOrientationFromQuaternion(w, x, y, z) {
     const servo1Angle = randFloat(0, 180);
     const servo2Angle = randFloat(0, 180);
     const servo3Angle = randFloat(0, 180);
+
+
+
     
     // THEN update control surfaces with the actual values
     updateControlSurfaces(servo1Angle, servo2Angle, servo3Angle);
