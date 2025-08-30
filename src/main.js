@@ -446,7 +446,7 @@ scene.add(axesHelper);
 
 // ---------------------------fucntion to setup websocket-----------------------------------------------------
 function setupWebSocket() {
-  const socket = new WebSocket('ws://127.0.0.1:8080'); // Your RPi Zero address
+  const socket = new WebSocket('ws://127.0.0.1:9002'); // Your RPi Zero address
   
   socket.onopen = function() {
     console.log('WebSocket connected to monocopter');
@@ -475,12 +475,6 @@ function setupWebSocket() {
 
 // Call this after your Three.js setup
 const monocopterSocket = setupWebSocket();
-
-
-
-
-
-
 
 
 // Animation loop for three js
