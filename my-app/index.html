@@ -1,65 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="src/style.css"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocopter Telemetry UI</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div class="grid">
 
-
-    
-    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
-  </head>
-  <body>
-    <div class="container">
-
-      <div class="Head"> Telemetry </div>
-
-
-      <div class="plotContainer">
-        <div class="Plotter" id="Plotter"></div>
-          <div class="statusBar">
-            <button class="connectionStatus stats">socket <div class="insideConnection statusdiv"></div></button>
-            <div class="armedStatus stats"><p>armed</p> <div class="insideArmed statusdiv"></div> </div>
-          </div>
-        </div>
-
-      <div class="numericalData">
-        <div class="battery box" >
-          <div class="voltage box"> 12.2v</div>
-          <div class="current box">1.3amp</div>
-        </div>
-        <div class="developer box">
-          <p class="developer"> Developed by:</p>
-        </div>
-      </div>
-
-      <div class="rpmData"> 
-
-        <div class="speedometerTop rpm">
-        </div>
-
-        <div class="pwmTop rpm"></div>
-
-        <div class="speedometerBottom rpm"></div>
-        <div class="pwmBottom rpm"></div>
-      </div>
-
-      <div class="controlSurfaces">
-        <canvas class="controlSurfacescanvas"></canvas>
-        <div class="top" >0</div>
-        <div class="left">0</div>
-        <div class="right">0</div>
-      </div>
-
-      <div class="orientation">
-        <canvas class="threejsCanvas"></canvas>
-      </div>
-      
+    <!-- Top Left -->
+    <div class="panel orientation">
+      <pre id="orientation"></pre>
+      <div id="cubeContainer" style="width: 300px; height: 300px;"></div>
     </div>
 
 
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <!-- Top Right (Sensors + Motors side by side) -->
+    <div class="panel top-right">
+      <div class="split">
+        <pre id="sensors"></pre>
+        <pre id="motors"></pre>
+      </div>
+    </div>
+
+    <!-- Bottom Left -->
+    <div class="panel control">
+      <pre id="servos"></pre>
+    </div>
+
+    <!-- Bottom Right (Message Box) -->
+    <div class="panel messages">
+      <pre id="log"></pre>
+    </div>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script src="./src/main.js"></script>
+</body>
 </html>
